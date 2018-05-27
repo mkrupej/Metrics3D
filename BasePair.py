@@ -64,8 +64,8 @@ class BasePair(object):
             file = STACKING.format(self.pdb_id)
 
         with open(file) as csv_file:
-                spamreader = csv.reader(csv_file, delimiter='|', quotechar = " ")
-                for line in spamreader:
+                line_reader = csv.reader(csv_file, delimiter='|', quotechar = " ")
+                for line in line_reader:
                     pair['a_model'] = line[1]
                     pair['a_chain'] = line[2]
                     pair['a_compound'] = line[3]
@@ -84,6 +84,6 @@ class BasePair(object):
 pdblist = ["1EHZ", "1EVV"]
 a = BasePairLoader(pdblist)
 
-b = BasePair("1EHZ")
+b = BasePair("1EVV")
 #print(b.base_pairs)
-#print(b.base_stacking)
+print(b.base_stacking)
