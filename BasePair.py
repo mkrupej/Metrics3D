@@ -1,38 +1,37 @@
-from Bio.PDB import *
-import numpy
 import wget
 import os
 import csv
-import re
-
-
-BASE_PAIR_CALCULATOR = "http://rna.bgsu.edu/rna3dhub/pdb/{}/interactions/fr3d/basepairs/csv"
-BASE_STACKING_CALCULATOR = "http://rna.bgsu.edu/rna3dhub/pdb/{}/interactions/fr3d/stacking/csv"
+import logging
 
 
 class BasePairLoader(object):
 
-    def __init__(self, pdb_id_list):
+    def __init__(self):
+        self.BASE_PAIR_CALCULATOR = "http://rna.bgsu.edu/rna3dhub/pdb/{}/interactions/fr3d/basepairs/csv"
+        self.BASE_STACKING_CALCULATOR = "http://rna.bgsu.edu/rna3dhub/pdb/{}/interactions/fr3d/stacking/csv"
 
-        self.pdb_id_list = pdb_id_list
-        self.retrieve_base_pair_and_stacking()
+    def retrieve_base_pair(self, pdb_id_list):
+        for pdb_id in pdb_id_list:
+            save_path = "base_pair/{}".format(pdb_id)
+            download_path = self.BASE_PAIR_CALCULATOR.format(pdb_id)
 
-    def retrieve_base_pair_and_stacking(self):
+            self.download_file(save_path, download_path)
 
-        for pdb_id in self.pdb_id_list:
-            save_path_base_pair = "base_pair/{}".format(pdb_id)
-            download_path_base_pair = BASE_PAIR_CALCULATOR.format(pdb_id)
+    def retrieve_stacking(self, pdb_id_list):
+        for pdb_id in pdb_id_list:
+            save_path = "base_stacking/{}".format(pdb_id)
+            download_path = self.BASE_STACKING_CALCULATOR.format(pdb_id)
 
-            save_path_base_stacking = "base_stacking/{}".format(pdb_id)
-            download_path_base_stacking = BASE_STACKING_CALCULATOR.format(pdb_id)
+            self.download_file(save_path, download_path)
 
-            if not os.path.exists(save_path_base_pair): #jesli plik istnieje pomin pobieranie
-                wget.download(download_path_base_pair, save_path_base_pair)
+    @staticmethod
+    def download_file(save_path, download_path):
+        if not os.path.exists(save_path):
+            wget.download(save_path, download_path)
+        else:
+            logging.info('File exists: {}'.format(save_path))
 
-            if not os.path.exists(save_path_base_stacking):
-                wget.download(download_path_base_stacking, save_path_base_stacking)
-
-
+#TODO fix me Michal
 class BasePair(object):
 
     def __init__(self, pdb_id):
@@ -78,12 +77,3 @@ class BasePair(object):
                     alignment.append(pair)
 
         return alignment
-
-
-
-pdblist = ["1EHZ", "1EVV"]
-a = BasePairLoader(pdblist)
-
-b = BasePair("1EHZ")
-#print(b.base_pairs)
-#print(b.base_stacking)
