@@ -1,5 +1,5 @@
 from Bio.SVDSuperimposer import SVDSuperimposer
-import numpy
+from helper.PDBHelper import *
 
 
 class MetricsRMSD(object):
@@ -13,7 +13,10 @@ class MetricsRMSD(object):
         self.reference_coordinate = None
         self.model_coordinate = None
 
-    def set(self, reference_coordinate, model_coordinate):
+    def set(self, reference_atoms, model_atoms):
+
+        reference_coordinate = to_vector_list(reference_atoms)
+        model_coordinate = to_vector_list(model_atoms)
 
         if not len(reference_coordinate) == len(model_coordinate):
             raise ValueError("Reference coordinate and coordinate moving atom lists differ in size")
