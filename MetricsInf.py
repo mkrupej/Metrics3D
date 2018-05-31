@@ -3,12 +3,7 @@ import numpy
 
 class MetricsInf(object):
 
-    MCC = 0
-    PPV = 0
-    STY = 0
-    TP = 0
-    FP = 0
-    FN = 0
+    variables = {"MCC" : None, "PPV": None, "STY": None, "TP": None, "FP": None, "FN": None}
 
     def __init__(self):
         self.pdb_id_a = None

@@ -31,24 +31,29 @@ class BasePairLoader(object):
         else:
             logging.info('File exists: {}'.format(save_path))
 
-#TODO fix me Michal
 class BasePair(object):
 
     def __init__(self, pdb_id):
         self.pdb_id = pdb_id
-        self.base_pairs = self.extract_pairs()
-        self.base_stacking = self.extract_stacking()
-
-    def extract_pairs(self):
-        return self.extract_alignment("PAIR")
-
-    def extract_stacking(self):
-        return self.extract_alignment("STACKING")
-
-    def extract_alignment(self, type):
-
         PAIR = "base_pair/{}"
         STACKING = "base_stacking/{}"
+
+        self.base_pairs = None
+        self.base_stacking = None
+
+    def clear(self):
+        self.base_stacking = None
+        self.base_pairs = None
+
+    def extract_pairs(self):
+        self.clear()
+        self.base_pairs = self.extract_alignment("PAIR")
+
+    def extract_stacking(self):
+        self.clear()
+        self.base_stacking = self.extract_alignment("STACKING")
+
+    def extract_alignment(self, type):
 
         alignment = []
 
@@ -57,10 +62,10 @@ class BasePair(object):
                 'interaction': None}
 
         if type is "PAIR":
-            file = PAIR.format(self.pdb_id)
+            file = self.PAIR.format(self.pdb_id)
 
         elif type is "STACKING":
-            file = STACKING.format(self.pdb_id)
+            file = self.STACKING.format(self.pdb_id)
 
         with open(file) as csv_file:
                 line_reader = csv.reader(csv_file, delimiter='|', quotechar = " ")
