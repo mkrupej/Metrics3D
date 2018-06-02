@@ -29,7 +29,7 @@ class MetricsRMSD(object):
         self.sup.set(self.reference_coordinate, self.model_coordinate)
         self.sup.run()
 
-    def get_rms(self):
+    def calculate_rms(self):
         rotation, translation = self.sup.get_rotran()
 
         transformed_coordinate = numpy.dot(self.model_coordinate, rotation) + translation

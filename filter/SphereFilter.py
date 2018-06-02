@@ -24,8 +24,8 @@ def filter_intersection_atoms(reference_residues, model_residues, sphere=None):
     reference_atoms, model_atoms = [], []
 
     for i in seq_id_list:
-        reference_atoms += list(filter_atoms(filtered_reference[i], sphere))
-        model_atoms += list(filter_atoms(filtered_model[i], sphere))
+        reference_atoms += list(filter_atoms_in_residue(filtered_reference[i], sphere))
+        model_atoms += list(filter_atoms_in_residue(filtered_model[i], sphere))
 
     reference_atoms = [a for a in reference_atoms if a.get_name() in map(lambda x: x.get_name(), model_atoms)]
     model_atoms = [a for a in model_atoms if a.get_name() in map(lambda x: x.get_name(), reference_atoms)]
@@ -33,8 +33,15 @@ def filter_intersection_atoms(reference_residues, model_residues, sphere=None):
     return reference_atoms, model_atoms
 
 
-def filter_atoms(residue, sphere):
+def filter_atoms_in_residue(residue, sphere):
     if sphere is not None and isinstance(sphere, Sphere):
         return filter(lambda x: sphere.__contains__(x), [a.get_coordinate() for a in residue.get_atoms()])
     else:
         return residue.get_atoms()
+
+
+def filter_atoms(atoms, sphere):
+    if sphere is not None and isinstance(sphere, Sphere):
+        return filter(lambda x: sphere.__contains__(x), [a.get_coordinate() for a in atoms])
+    else:
+        return atoms

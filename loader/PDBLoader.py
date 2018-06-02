@@ -18,3 +18,7 @@ class PDBLoader(object):
 
     def get_residue(self, pdb_id):
         return list(self.parse_structure(pdb_id).get_residues())
+
+    def get_atoms(self, pdb_id):
+        return list(self.parse_structure(pdb_id).get_atoms())
+
