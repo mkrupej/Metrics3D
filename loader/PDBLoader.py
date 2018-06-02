@@ -1,5 +1,4 @@
 from Bio.PDB import *
-from filter.Sphere import *
 import shutil
 
 
@@ -17,11 +16,5 @@ class PDBLoader(object):
         self.retrieve_pdb_file(pdb_id)
         return self.parser.get_structure(pdb_id, 'pdb/pdb{}.ent'.format(pdb_id.lower()))
 
-    def get_atoms(self, pdb_id, sphere=None):
-
-        atoms = list(self.parse_structure(pdb_id).get_atoms())
-
-        if sphere is not None and isinstance(sphere, Sphere):
-            return list(filter(lambda x: sphere.__contains__(x.get_vector()), atoms))
-        else:
-            return atoms
+    def get_residue(self, pdb_id):
+        return list(self.parse_structure(pdb_id).get_residues())

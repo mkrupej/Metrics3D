@@ -9,13 +9,3 @@ def to_vector_list(atom_list):
 
     return coordinate
 
-
-def get_intersection(first_atoms, second_atoms):
-    first_residue = [a.get_parent() for a in first_atoms]
-    second_residue = [a.get_parent() for a in second_atoms]
-
-    intersection_residue = {r.get_id()[1] for r in first_residue if second_residue.__contains__(r)}
-
-    return intersection_residue
-
-
