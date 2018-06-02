@@ -1,29 +1,45 @@
+import wget
+import os
 import csv
+import logging
 
 
 class BasePair(object):
+
+    watson_crick = ["cWW", "tWW", "cWH", "tWH", "cWS", "tWS"]
 
     def __init__(self, pdb_id):
         self.pdb_id = pdb_id
         self.PAIR = "base_pair/{}"
         self.STACKING = "base_stacking/{}"
 
-        self.base_pairs = None
+        self.base_pairs_all = None
+        self.base_pairs_wc = None
+        self.base_pairs_nwc = None
         self.base_stacking = None
 
-    def clear(self):
-        self.base_stacking = None
-        self.base_pairs = None
+        self.types = {"stacking": self.base_stacking, "all": self.base_pairs_all, "wc": self.base_pairs_wc, "nwc": self.base_pairs_nwc}
 
-    def extract_pairs(self):
-        self.clear()
-        self.base_pairs = self.extract_alignment("pair")
+    def clear(self, type):
+        self.types[type] = None
+
+    def extract_all_pairs(self):
+        self.clear("all")
+        self.base_pairs_all = self.extract_alignment("PAIR")
+
+    def extract_wc_pairs(self):
+        self.clear("wc")
+        self.base_pairs_wc = self.extract_alignment("PAIR", "WC")
+
+    def extract_nwc_pairs(self):
+        self.clear("nwc")
+        self.base_pairs_nwc = self.extract_alignment("PAIR", "nWC")
 
     def extract_stacking(self):
-        self.clear()
-        self.base_stacking = self.extract_alignment("stacking")
+        self.clear("stacking")
+        self.base_stacking = self.extract_alignment("STACKING")
 
-    def extract_alignment(self, file_type):
+    def extract_alignment(self, type, subtype=None):
 
         alignment = []
 
@@ -31,14 +47,13 @@ class BasePair(object):
                 'b_model': None, 'b_chain': None, 'b_compound': None, 'b_number': None,
                 'interaction': None}
 
-        if file_type.lower() is "pair":
+        subtypes = {'WC': None, "nWC": None}
+
+        if type is "PAIR":
             file = self.PAIR.format(self.pdb_id)
 
-        elif file_type.lower() is "stacking":
+        elif type is "STACKING":
             file = self.STACKING.format(self.pdb_id)
-
-        else:
-            raise ValueError("Wrong file type. Should be stacking or pair")
 
         with open(file) as csv_file:
                 line_reader = csv.reader(csv_file, delimiter='|', quotechar = " ")
@@ -52,6 +67,33 @@ class BasePair(object):
                     pair['b_compound'] = line[7]
                     pair['b_number'] = line[8][:-1]
                     pair['interaction'] = line[4].split('"')[2]
-                    alignment.append(pair)
 
+                    if subtype == None:
+                        alignment.append(pair)
+
+                    elif subtype == "WC":
+                        if pair['interaction'] in self.watson_crick:
+                            #print(pair)
+                            alignment.append(pair)
+                            print(alignment)
+
+                    elif subtype == "nWC":
+                        if pair['interaction'] not in self.watson_crick:
+                            alignment.append(pair)
+
+                    pair.clear()
         return alignment
+
+    def get_all(self):
+        return self.base_pairs_all
+
+    def get_wc_pairs(self):
+        return self.base_pairs_wc
+
+    def get_nwc_pairs(self):
+        return self.base_pairs_nwc
+
+    def get_stacking(self):
+        return self.base_stacking
+
+
