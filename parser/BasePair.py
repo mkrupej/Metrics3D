@@ -2,6 +2,7 @@ import wget
 import os
 import csv
 import logging
+from loader.PDBLoader import *
 
 
 class BasePair(object):
@@ -9,6 +10,7 @@ class BasePair(object):
     watson_crick = ["cWW", "tWW", "cWH", "tWH", "cWS", "tWS"]
 
     def __init__(self, pdb_id):
+        self.loader = PDBLoader()
         self.pdb_id = pdb_id
         self.PAIR = "base_pair/{}"
         self.STACKING = "base_stacking/{}"
@@ -41,6 +43,11 @@ class BasePair(object):
 
     def extract_alignment(self, type, subtype=None):
 
+        residues = self.loader.parse_structure(self.pdb_id)
+
+        def get_residues_by_seq(seq):
+            return [r for r in residues if r.get_id()[1]==seq]
+
         alignment = []
 
         pair = {'a_model' : None, 'a_chain': None, 'a_compound': None, 'a_number': None,
@@ -61,11 +68,11 @@ class BasePair(object):
                     pair['a_model'] = line[1]
                     pair['a_chain'] = line[2]
                     pair['a_compound'] = line[3]
-                    pair['a_number'] = line[4].split('"')[0]
+                    pair['a_number'] = get_residues_by_seq(line[4].split('"')[0])
                     pair['b_model'] = line[5]
                     pair['b_chain'] = line[6]
                     pair['b_compound'] = line[7]
-                    pair['b_number'] = line[8][:-1]
+                    pair['b_number'] = get_residues_by_seq(line[8][:-1])
                     pair['interaction'] = line[4].split('"')[2]
 
                     if subtype == None:
@@ -84,7 +91,7 @@ class BasePair(object):
                     pair.clear()
         return alignment
 
-    def get_all(self):
+    def get_all(self, sphere=None):
         return self.base_pairs_all
 
     def get_wc_pairs(self):
