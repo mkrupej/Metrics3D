@@ -1,5 +1,5 @@
 from Bio.PDB import *
-import numpy
+from filter.Sphere import *
 
 
 class PDBLoader(object):
@@ -15,12 +15,11 @@ class PDBLoader(object):
         self.retrieve_pdb_file(pdb_id)
         return self.parser.get_structure(pdb_id, 'pdb/pdb{}.ent'.format(pdb_id.lower()))
 
-    def get_atom_array(self, pdb_id):
+    def get_atoms(self, pdb_id, sphere=None):
+
         atoms = list(self.parse_structure(pdb_id).get_atoms())
 
-        coordinate = numpy.zeros((len(atoms), 3))
-
-        for index, atom in enumerate(atoms):
-            coordinate[index] = atom.get_coord()
-
-        return coordinate
+        if sphere is not None and isinstance(sphere, Sphere):
+            return list(filter(lambda x: sphere.__contains__(x.get_vector()), atoms))
+        else:
+            return atoms
