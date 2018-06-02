@@ -49,7 +49,7 @@ class BasePair(object):
                     pair['a_number'] = line[4].split('"')[0]
                     pair['b_model'] = line[5]
                     pair['b_chain'] = line[6]
-                    pair['b_compound'] =line[7]
+                    pair['b_compound'] = line[7]
                     pair['b_number'] = line[8][:-1]
                     pair['interaction'] = line[4].split('"')[2]
                     alignment.append(pair)

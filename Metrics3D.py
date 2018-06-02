@@ -13,6 +13,8 @@ class Metrics3D(object):
         first_structure = self.loader.get_atoms(first_pdb_id, sphere)
         second_structure = self.loader.get_atoms(second_pdb_id, sphere)
 
+        intersection_residue = get_intersection(first_structure, second_structure)
+
         self.metric_rmsd.set(first_structure, second_structure)
         self.metric_rmsd.run_svd()
 

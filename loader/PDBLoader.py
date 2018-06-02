@@ -1,5 +1,6 @@
 from Bio.PDB import *
 from filter.Sphere import *
+import shutil
 
 
 class PDBLoader(object):
@@ -10,6 +11,7 @@ class PDBLoader(object):
 
     def retrieve_pdb_file(self, pdb_id):
         self.pdb_list.retrieve_pdb_file(pdb_id, file_format='pdb', pdir='pdb')
+        shutil.rmtree('obsolete', ignore_errors=True)
 
     def parse_structure(self, pdb_id):
         self.retrieve_pdb_file(pdb_id)
