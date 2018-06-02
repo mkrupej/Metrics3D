@@ -20,7 +20,6 @@ class MetricsInf(object):
         self.trna_1_pairs = trna_1_pairs
         self.trna_2_pairs = trna_2_pairs
 
-
     def run(self):
         self.variables["TP"], self.variables["FP"], self.variables["FN"] = self.compare_pairs()
         self.variables["PPV"] = self.variables["TP"] / (self.variables["TP"] + self.variables["FP"])
