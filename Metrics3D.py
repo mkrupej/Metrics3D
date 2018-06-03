@@ -25,7 +25,10 @@ class Metrics3D(object):
         return self.metric_clash_score.calculate_clash_score(filtered_atoms)
 
     def di(self, first_pdb_id, second_pdb_id, sphere=None):
-        pass
+        rmsd_result = self.rmsd(first_pdb_id, second_pdb_id, sphere=sphere)
+        inf_result = self.inf(first_pdb_id, second_pdb_id, sphere=sphere)
+
+        return rmsd_result / inf_result
 
     def rmsd(self, first_pdb_id, second_pdb_id, sphere=None):
 
