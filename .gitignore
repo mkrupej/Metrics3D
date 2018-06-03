@@ -1,5 +1,5 @@
 obsolete/
 pdb/
 .idea/
--base_pair/
--base_stacking/
+base_pair/
+base_stacking/

@@ -15,15 +15,15 @@ def filter_intersection_atoms(reference_residues, model_residues, sphere=None):
 
     model_id_list = map(lambda x: x.get_id()[1], model_residues)
 
-    seq_id_list = [s.get_id()[1] for s in reference_residues if s.get_id()[1] in model_id_list]
+    intersection_seq_id_list = [s.get_id()[1] for s in reference_residues if s.get_id()[1] in model_id_list]
 
-    filtered_reference = {r.get_id()[1]: r for r in reference_residues if r.get_id()[1] in seq_id_list}
+    filtered_reference = {r.get_id()[1]: r for r in reference_residues if r.get_id()[1] in intersection_seq_id_list}
 
-    filtered_model = {r.get_id()[1]: r for r in model_residues if r.get_id()[1] in seq_id_list}
+    filtered_model = {r.get_id()[1]: r for r in model_residues if r.get_id()[1] in intersection_seq_id_list}
 
     reference_atoms, model_atoms = [], []
 
-    for i in seq_id_list:
+    for i in intersection_seq_id_list:
         reference_atoms += list(filter_atoms_in_residue(filtered_reference[i], sphere))
         model_atoms += list(filter_atoms_in_residue(filtered_model[i], sphere))
 
@@ -45,3 +45,7 @@ def filter_atoms(atoms, sphere):
         return filter(lambda x: sphere.__contains__(x), [a.get_coordinate() for a in atoms])
     else:
         return atoms
+
+
+def filter_base_pairs(base_pairs, sphere):
+    return base_pairs
