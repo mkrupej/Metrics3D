@@ -8,34 +8,38 @@ class BasePairLoader(object):
     def __init__(self):
         self.BASE_PAIR_CALCULATOR = "http://rna.bgsu.edu/rna3dhub/pdb/{}/interactions/fr3d/basepairs/csv"
         self.BASE_STACKING_CALCULATOR = "http://rna.bgsu.edu/rna3dhub/pdb/{}/interactions/fr3d/stacking/csv"
+        self.save_path_pair = "../base_pair/{}"
+        self.save_path_stacking = "../base_stacking/{}"
 
     def retrieve_base_pair(self, pdb_id_list):
+        if not os.path.exists(self.save_path_pair.format("")):
+            os.makedirs("../base_pair")
+
         for pdb_id in pdb_id_list:
-            save_path = "../base_pair/{}".format(pdb_id)
+            save_path = self.save_path_pair.format(pdb_id)
             download_path = self.BASE_PAIR_CALCULATOR.format(pdb_id)
 
             self.download_file(download_path, save_path)
 
     def retrieve_stacking(self, pdb_id_list):
+        if not os.path.exists(self.save_path_stacking.format("")):
+            os.makedirs("../base_stacking")
+
         for pdb_id in pdb_id_list:
-            save_path = "../base_stacking/{}".format(pdb_id)
+            save_path = self.save_path_stacking.format(pdb_id)
             download_path = self.BASE_STACKING_CALCULATOR.format(pdb_id)
 
             self.download_file(download_path, save_path)
 
     @staticmethod
     def download_file(download_path, save_path):
-
-        if not os.path.exists(save_path):
-            os.makedirs(save_path)
-
         if not os.path.exists(save_path):
             wget.download(download_path, save_path)
         else:
             logging.info('File exists: {}'.format(save_path))
 
 
-a = BasePairLoader()
-
-a.retrieve_stacking(["1EHZ", "1EVV"])
-a.retrieve_base_pair(["1EHZ", "1EVV"])
+# a = BasePairLoader()
+#
+# a.retrieve_stacking(["1EHZ", "1EVV"])
+# a.retrieve_base_pair(["1EHZ", "1EVV"])

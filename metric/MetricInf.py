@@ -4,21 +4,21 @@ from math import sqrt
 class MetricsInf(object):
 
     def __init__(self):
-        self.trna_1_pairs = None
-        self.trna_2_pairs = None
+        self.model_pairs = None
+        self.reference_pairs = None
         self.variables = {"PPV": 0, "STY": 0, "TP": 0, "FP": 0, "FN": 0}
         self.mcc = 0
 
     def clear(self):
-        self.trna_1_pairs = None
-        self.trna_2_pairs = None
+        self.model_pairs = None
+        self.reference_pairs = None
         self.variables = {"PPV": 0, "STY": 0, "TP": 0, "FP": 0, "FN": 0}
         self.mcc = 0
 
     def set(self, trna_1_pairs, trna_2_pairs):
         self.clear()
-        self.trna_1_pairs = trna_1_pairs
-        self.trna_2_pairs = trna_2_pairs
+        self.model_pairs = trna_1_pairs
+        self.reference_pairs = trna_2_pairs
 
     def run(self):
         self.variables["TP"], self.variables["FP"], self.variables["FN"] = self.compare_pairs()
@@ -35,9 +35,9 @@ class MetricsInf(object):
         false_positive = 0
         false_negative = 0
 
-        for pair_a in self.trna_1_pairs:
+        for pair_a in self.model_pairs:
             match_a = self.get_pair(pair_a)
-            for pair_b in self.trna_2_pairs:
+            for pair_b in self.reference_pairs:
                 match_b = self.get_pair(pair_b)
                 if match_a == match_b:
                     true_positive += 1
@@ -45,9 +45,9 @@ class MetricsInf(object):
             else:
                 false_positive += 1
 
-        for pair_b in self.trna_2_pairs:
+        for pair_b in self.reference_pairs:
             match_b = self.get_pair(pair_b)
-            for pair_a in self.trna_1_pairs:
+            for pair_a in self.model_pairs:
                 match_a = self.get_pair(pair_a)
                 if match_b == match_a:
                     break
