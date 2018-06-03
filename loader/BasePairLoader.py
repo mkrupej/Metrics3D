@@ -25,6 +25,10 @@ class BasePairLoader(object):
 
     @staticmethod
     def download_file(download_path, save_path):
+
+        if not os.path.exists(save_path):
+            os.makedirs(save_path)
+
         if not os.path.exists(save_path):
             wget.download(download_path, save_path)
         else:
