@@ -47,5 +47,14 @@ def filter_atoms(atoms, sphere):
         return atoms
 
 
-def filter_base_pairs(base_pairs, sphere):
-    return base_pairs
+def filter_base_pairs(base_pairs, sphere, residues):
+
+    result = []
+
+    for b in base_pairs:
+        res_1 = filter_atoms_in_residue(residues[int(b['a_number'])], sphere)
+        res_2 = filter_atoms_in_residue(residues[int(b['b_number'])], sphere)
+        if len(list(res_1)) > 0 and len(list(res_2)) > 0:
+            result.append(b)
+
+    return result
