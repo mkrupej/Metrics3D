@@ -55,8 +55,11 @@ class Metrics3D(object):
         else:
             raise ValueError("Unsupported bp_type. Use all, wc, nWc, or stacking")
 
-        filtered_first_base_pairs = filter_base_pairs(first_base_pairs, sphere)
-        filtered_second_base_pairs = filter_base_pairs(second_base_pairs, sphere)
+        first_residue = self.pdb_loader.get_residue_as_map(first_pdb_id)
+        second_residue = self.pdb_loader.get_residue_as_map(second_pdb_id)
+
+        filtered_first_base_pairs = filter_base_pairs(first_base_pairs, sphere, first_residue)
+        filtered_second_base_pairs = filter_base_pairs(second_base_pairs, sphere, second_residue)
 
         self.metric_inf.set(filtered_first_base_pairs, filtered_second_base_pairs)
         return self.metric_inf.calculate_inf()
