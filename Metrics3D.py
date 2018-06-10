@@ -11,7 +11,7 @@ class Metrics3D(object):
     def __init__(self):
         self.pdb_loader = PDBLoader()
         self.base_pair_loader = BasePairLoader()
-        self.metric_rmsd = MetricsRMSD.MetricsRMSD()
+        self.metric_rmsd = MetricsRMSD()
         self.metric_inf = MetricsInf()
         self.metric_clash_score = MetricClashScore()
         self.metric_p_value = MetricsPValue()
