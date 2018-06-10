@@ -16,25 +16,25 @@ class Metrics3D(object):
         self.metric_clash_score = MetricClashScore()
         self.metric_p_value = MetricsPValue()
 
-    def clash_score(self, pdb_id, distance, sphere=None):
+    def clash_score(self, pdb_path, distance, sphere=None):
 
-        atoms = self.pdb_loader.get_atoms(pdb_id)
+        atoms = self.pdb_loader.get_atoms(pdb_path)
 
         filtered_atoms = filter_atoms(atoms, sphere)
 
         self.metric_clash_score.set_distance(distance)
         return self.metric_clash_score.calculate_clash_score(filtered_atoms)
 
-    def di(self, first_pdb_id, second_pdb_id, sphere=None):
-        rmsd_result = self.rmsd(first_pdb_id, second_pdb_id, sphere=sphere)
-        inf_result = self.inf(first_pdb_id, second_pdb_id, sphere=sphere)
+    def di(self, first_pdb_path, second_pdb_path, sphere=None):
+        rmsd_result = self.rmsd(first_pdb_path, second_pdb_path, sphere=sphere)
+        inf_result = self.inf(first_pdb_path, second_pdb_path, sphere=sphere)
 
         return rmsd_result / inf_result
 
-    def rmsd(self, first_pdb_id, second_pdb_id, sphere=None):
+    def rmsd(self, first_pdb_path, second_pdb_path, sphere=None):
 
-        reference_residues = self.pdb_loader.get_residue(first_pdb_id)
-        model_residues = self.pdb_loader.get_residue(second_pdb_id)
+        reference_residues = self.pdb_loader.get_residue(first_pdb_path)
+        model_residues = self.pdb_loader.get_residue(second_pdb_path)
 
         filtered_reference, filtered_model = filter_intersection_atoms(reference_residues, model_residues, sphere)
 
@@ -43,23 +43,23 @@ class Metrics3D(object):
 
         return self.metric_rmsd.calculate_rms()
 
-    def inf(self, first_pdb_id, second_pdb_id, bp_type='all', sphere=None):
+    def inf(self, first_pdb_file, second_pdb_file, bp_type='all', sphere=None):
 
         if bp_type == 'all pairs':
-            first_base_pairs, second_base_pairs = self.base_pair_loader.get_all_pairs(first_pdb_id, second_pdb_id)
+            first_base_pairs, second_base_pairs = self.base_pair_loader.get_all_pairs(first_pdb_file, second_pdb_file)
         elif bp_type == 'wc':
-            first_base_pairs, second_base_pairs = self.base_pair_loader.get_wc(first_pdb_id, second_pdb_id)
+            first_base_pairs, second_base_pairs = self.base_pair_loader.get_wc(first_pdb_file, second_pdb_file)
         elif bp_type == 'nWc':
-            first_base_pairs, second_base_pairs = self.base_pair_loader.get_nwc(first_pdb_id, second_pdb_id)
+            first_base_pairs, second_base_pairs = self.base_pair_loader.get_nwc(first_pdb_file, second_pdb_file)
         elif bp_type == 'stacking':
-            first_base_pairs, second_base_pairs = self.base_pair_loader.get_stacking(first_pdb_id, second_pdb_id)
+            first_base_pairs, second_base_pairs = self.base_pair_loader.get_stacking(first_pdb_file, second_pdb_file)
         elif bp_type == 'all':
-            first_base_pairs, second_base_pairs = self.base_pair_loader.get_all(first_pdb_id, second_pdb_id)
+            first_base_pairs, second_base_pairs = self.base_pair_loader.get_all(first_pdb_file, second_pdb_file)
         else:
             raise ValueError("Unsupported bp_type. Use all pairs, wc, nWc, stacking or all")
 
-        first_residue = self.pdb_loader.get_residue_as_map(first_pdb_id)
-        second_residue = self.pdb_loader.get_residue_as_map(second_pdb_id)
+        first_residue = self.pdb_loader.get_residue_as_map(first_pdb_file)
+        second_residue = self.pdb_loader.get_residue_as_map(second_pdb_file)
 
         filtered_first_base_pairs = filter_base_pairs(first_base_pairs, sphere, first_residue)
         filtered_second_base_pairs = filter_base_pairs(second_base_pairs, sphere, second_residue)
@@ -74,3 +74,25 @@ class Metrics3D(object):
 
         self.metric_p_value.set_parameters(len, rmsd)
         return self.metric_p_value.calculate_p_value()
+
+
+class Metric3DPdbId(object):
+
+    def __init__(self):
+        self.metric = Metrics3D()
+        self.pdb_loader = PDBLoader()
+
+    def clash_score(self, pdb_id, distance, sphere=None):
+
+        self.pdb_loader.retrieve_pdb_file(pdb_id)
+
+        return self.metric.clash_score('pdb/pdb{}.ent'.format(pdb_id), distance, sphere)
+
+    def rmsd(self, first_pdb_id, second_pdb_id, sphere=None):
+
+        self.pdb_loader.retrieve_pdb_file(first_pdb_id)
+        self.pdb_loader.retrieve_pdb_file(second_pdb_id)
+
+        return self.metric.rmsd('pdb/pdb{}.ent'.format(first_pdb_id), 'pdb/pdb{}.ent'.format(second_pdb_id), sphere)
+
+
