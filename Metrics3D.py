@@ -11,7 +11,7 @@ class Metrics3D(object):
     def __init__(self):
         self.pdb_loader = PDBLoader()
         self.base_pair_loader = BasePairLoader()
-        self.metric_rmsd = MetricsRMSD()
+        self.metric_rmsd = MetricsRMSD.MetricsRMSD()
         self.metric_inf = MetricsInf()
         self.metric_clash_score = MetricClashScore()
         self.metric_p_value = MetricsPValue()
@@ -45,16 +45,18 @@ class Metrics3D(object):
 
     def inf(self, first_pdb_id, second_pdb_id, bp_type='all', sphere=None):
 
-        if bp_type == 'all':
-            first_base_pairs, second_base_pairs = self.base_pair_loader.get_all(first_pdb_id, second_pdb_id)
+        if bp_type == 'all pairs':
+            first_base_pairs, second_base_pairs = self.base_pair_loader.get_all_pairs(first_pdb_id, second_pdb_id)
         elif bp_type == 'wc':
             first_base_pairs, second_base_pairs = self.base_pair_loader.get_wc(first_pdb_id, second_pdb_id)
         elif bp_type == 'nWc':
             first_base_pairs, second_base_pairs = self.base_pair_loader.get_nwc(first_pdb_id, second_pdb_id)
         elif bp_type == 'stacking':
             first_base_pairs, second_base_pairs = self.base_pair_loader.get_stacking(first_pdb_id, second_pdb_id)
+        elif bp_type == 'all':
+            first_base_pairs, second_base_pairs = self.base_pair_loader.get_all(first_pdb_id, second_pdb_id)
         else:
-            raise ValueError("Unsupported bp_type. Use all, wc, nWc, or stacking")
+            raise ValueError("Unsupported bp_type. Use all pairs, wc, nWc, stacking or all")
 
         first_residue = self.pdb_loader.get_residue_as_map(first_pdb_id)
         second_residue = self.pdb_loader.get_residue_as_map(second_pdb_id)

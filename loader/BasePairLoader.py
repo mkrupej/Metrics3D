@@ -41,10 +41,14 @@ class BasePairLoader(object):
         else:
             print('File exists: {}'.format(save_path))
 
-    def get_all(self, first_pdb_id, second_pdb_id):
+    def get_all_pairs(self, first_pdb_id, second_pdb_id):
         self.retrieve_base_pair([first_pdb_id, second_pdb_id])
         first_result = self.parser.extract_pair(first_pdb_id).get_all_pairs()
+        print(len(first_result))
+
         second_result = self.parser.extract_pair(second_pdb_id).get_all_pairs()
+        print(len(second_result))
+
         return first_result, second_result
 
     def get_wc(self, first_pdb_id, second_pdb_id):
@@ -60,7 +64,16 @@ class BasePairLoader(object):
         return first_result, second_result
 
     def get_stacking(self, first_pdb_id, second_pdb_id):
-        self.retrieve_base_pair([first_pdb_id, second_pdb_id])
+        self.retrieve_stacking([first_pdb_id, second_pdb_id])
         first_result = self.parser.extract_stacking(first_pdb_id).get_stacking()
         second_result = self.parser.extract_stacking(second_pdb_id).get_stacking()
         return first_result, second_result
+
+    def get_all(self, first_pdb_id, second_pdb_id):
+        self.retrieve_base_pair([first_pdb_id, second_pdb_id])
+        self.retrieve_stacking([first_pdb_id, second_pdb_id])
+        first_result_stacking = self.parser.extract_stacking(first_pdb_id).get_stacking()
+        first_result_pair = self.parser.extract_pair(first_pdb_id).get_all_pairs()
+        second_result_stacking = self.parser.extract_stacking(second_pdb_id).get_stacking()
+        second_result_pair = self.parser.extract_pair(second_pdb_id).get_all_pairs()
+        return first_result_pair+first_result_stacking, second_result_pair + second_result_stacking
