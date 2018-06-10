@@ -4,16 +4,17 @@ from metric.MetricsRMSD import *
 from metric.MetricClashScore import *
 from filter.SphereFilter import *
 from metric.MetricInf import *
-
+from metric.MetricsPValue import *
 
 class Metrics3D(object):
 
     def __init__(self):
         self.pdb_loader = PDBLoader()
         self.base_pair_loader = BasePairLoader()
-        self.metric_rmsd = MetricsRMSD()
+        self.metric_rmsd = MetricsRMSD.MetricsRMSD()
         self.metric_inf = MetricsInf()
         self.metric_clash_score = MetricClashScore()
+        self.metric_p_value = MetricsPValue()
 
     def clash_score(self, pdb_id, distance, sphere=None):
 
@@ -63,3 +64,11 @@ class Metrics3D(object):
 
         self.metric_inf.set(filtered_first_base_pairs, filtered_second_base_pairs)
         return self.metric_inf.calculate_inf()
+
+    def p_value(self, first_pdb_id, second_pdb_id, sphere=None):
+
+        rmsd = self.rmsd(first_pdb_id, second_pdb_id, sphere)
+        len = self.pdb_loader.get_length(first_pdb_id)
+
+        self.metric_p_value.set_parameters(len, rmsd)
+        return self.metric_p_value.calculate_p_value()

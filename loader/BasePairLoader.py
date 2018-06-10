@@ -1,6 +1,6 @@
 import wget
 import os
-from parser.BasePairParser import *
+from loader.BasePairParser import *
 
 
 class BasePairLoader(object):

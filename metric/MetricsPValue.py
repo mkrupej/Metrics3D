@@ -2,6 +2,9 @@ import numpy
 from numpy import sqrt
 import scipy.special as scipy
 
+import filter.SphereFilter
+from metric import MetricsRMSD
+
 
 class MetricsPValue(object):
 
@@ -14,21 +17,13 @@ class MetricsPValue(object):
         self.RMSD = RMSD
 
     def mean(self):
-        #tbd
-        return 2
+        return -.41
 
     def std(self):
-        #tbd
-        return 2
+        return 1.8 #Standard deviations are ∼1.8 ± 0.3 Å in all cases
 
     def calculate_z_value(self):
         return (self.RMSD - self.mean()) / self.std()
 
     def calculate_p_value(self):
         return ((1 + scipy.erf(self.calculate_z_value() / sqrt(2))) / 2)
-
-
-# a = MetricsPValue()
-# a.set_parameters(50, 20)
-#
-# print(a.calculate_p_value())
