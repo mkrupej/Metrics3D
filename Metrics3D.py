@@ -68,12 +68,21 @@ class Metrics3D(object):
         self.metric_inf.set(filtered_first_base_pairs, filtered_second_base_pairs)
         return self.metric_inf.calculate_inf()
 
-    def p_value(self, first_pdb_path, sphere=None):
+    def p_value(self, first_pdb_path, second_pdb_path, sphere=None):
 
-        rmsd = self.rmsd(first_pdb_path, sphere)
+        reference_residues = self.pdb_loader.get_residue(first_pdb_path)
+        model_residues = self.pdb_loader.get_residue(second_pdb_path)
+        filtered_reference, filtered_model = filter_intersection_atoms(reference_residues, model_residues, sphere)
+
+        self.metric_rmsd.set(filtered_reference, filtered_model)
+        self.metric_rmsd.run_svd()
+
+        rmsd = self.metric_rmsd.calculate_rms()
         len = self.pdb_loader.get_length(first_pdb_path)
-
-        self.metric_p_value.set_parameters(len, rmsd)
+        mean = self.metric_rmsd.calculate_mean()
+        std = self.metric_rmsd.calculate_std()
+        #print("rmsd: {}, len: {}, mean: {}, std: {}".format(rmsd, len, mean, std))
+        self.metric_p_value.set_parameters(len, rmsd, mean, std)
         return self.metric_p_value.calculate_p_value()
 
 

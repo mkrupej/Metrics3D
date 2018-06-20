@@ -36,3 +36,23 @@ class MetricsRMSD(object):
 
         diff = transformed_coordinate - self.reference_coordinate
         return numpy.sqrt(sum(sum(diff * diff)) / len(self.model_coordinate))
+    
+    def pre_calculate_rms(self):
+        rotation, translation = self.sup.get_rotran()
+
+        transformed_coordinate = numpy.dot(self.model_coordinate, rotation) + translation
+
+        diff = transformed_coordinate - self.reference_coordinate
+        return diff
+
+    def calculate_rms(self):
+        diff = self.pre_calculate_rms()
+        return numpy.sqrt(sum(sum(diff * diff)) / len(self.model_coordinate))
+
+    def calculate_mean(self):
+        rms = self.calculate_rms()
+        return rms * rms
+
+    def calculate_std(self):
+        diff = self.pre_calculate_rms()
+        return numpy.std(diff)

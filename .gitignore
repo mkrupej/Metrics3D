@@ -3,3 +3,4 @@ pdb/
 .idea/
 base_pair/
 base_stacking/
+*.pyc
