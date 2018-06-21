@@ -69,3 +69,18 @@ class PDBLoader(object):
         :return: map of residue seq -> residue object
         """
         return {e.get_id()[1]: e for e in self.parse_structure_by_file(pdb_path).get_residues()}
+
+    def get_atom_by_residue_seq(self, pdb_path, residue_seq):
+        """
+
+        :param pdb_path: : file_path: path to pdb file
+        :param residue_seq:
+        :return: atom C1' from residue with id given as parameter
+        """
+        residue = self.get_residue_as_map(pdb_path)[residue_seq]
+        result = list([x for x in residue.get_atoms() if x.get_name() == "C1'"])
+
+        if len(result) == 0:
+            raise Exception("Atom c1 not found in seq {}".format(residue_seq))
+        else:
+            return result[0].get_coord()
