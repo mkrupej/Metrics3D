@@ -1,6 +1,4 @@
 obsolete/
-pdb/
 .idea/
-base_pair/
-base_stacking/
 *.pyc
+mc_annotate_files.tar.gz
