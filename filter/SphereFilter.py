@@ -4,8 +4,9 @@ class Sphere(object):
         self.c = center
         self.r = radius
 
-    def __contains__(self, p):
-        if (p[0]-self.c[0]) ^ 2 + (p[1]-self.c[1]) ^ 2 + (p[2]-self.c[2]) ^ 2 < self.r ^ 2:
+    def __contains__(self, atom):
+        p = atom.get_coord()
+        if (p[0]-self.c[0]) ** 2 + (p[1]-self.c[1]) ** 2 + (p[2]-self.c[2]) ** 2 < self.r ** 2:
             return True
         else:
             return False
@@ -24,25 +25,26 @@ def filter_intersection_atoms(reference_residues, model_residues, sphere=None):
     reference_atoms, model_atoms = [], []
 
     for i in intersection_seq_id_list:
-        reference_atoms += list(filter_atoms_in_residue(filtered_reference[i], sphere))
-        model_atoms += list(filter_atoms_in_residue(filtered_model[i], sphere))
+        reference_atoms_temp = list(filter_atoms_in_residue(filtered_reference[i], sphere))
+        model_atoms_temp = list(filter_atoms_in_residue(filtered_model[i], sphere))
 
-    reference_atoms = [a for a in reference_atoms if a.get_name() in map(lambda x: x.get_name(), model_atoms)]
-    model_atoms = [a for a in model_atoms if a.get_name() in map(lambda x: x.get_name(), reference_atoms)]
+        reference_atoms += [a for a in reference_atoms_temp if a.get_name() in [x.get_name() for x in model_atoms_temp]]
+        model_atoms += [a for a in model_atoms_temp if a.get_name() in [x.get_name() for x in reference_atoms_temp]]
 
     return reference_atoms, model_atoms
 
 
 def filter_atoms_in_residue(residue, sphere):
+
     if sphere is not None and isinstance(sphere, Sphere):
-        return filter(lambda x: sphere.__contains__(x), [a.get_coordinate() for a in residue.get_atoms()])
+        return filter(lambda x: sphere.__contains__(x), [a for a in residue.get_atoms()])
     else:
         return residue.get_atoms()
 
 
 def filter_atoms(atoms, sphere):
     if sphere is not None and isinstance(sphere, Sphere):
-        return filter(lambda x: sphere.__contains__(x), [a.get_coordinate() for a in atoms])
+        return filter(lambda x: sphere.__contains__(x), [a for a in atoms])
     else:
         return atoms
 

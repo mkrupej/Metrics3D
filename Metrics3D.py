@@ -17,7 +17,15 @@ class Metrics3D(object):
         self.metric_clash_score = MetricClashScore()
         self.metric_p_value = MetricsPValue()
 
-    def clash_score(self, pdb_path, distance, sphere=None):
+    def get_c1_atome(self, pdb_path, residue_seq_id):
+        if residue_seq_id is None:
+            return None
+        else:
+            return self.pdb_loader.get_atom_by_residue_seq(pdb_path, residue_seq_id)
+
+    def clash_score(self, pdb_path, distance, residue_seq_id=None):
+
+        sphere = self.get_c1_atome(pdb_path, residue_seq_id)
 
         atoms = self.pdb_loader.get_atoms(pdb_path)
 
@@ -26,13 +34,18 @@ class Metrics3D(object):
         self.metric_clash_score.set_distance(distance)
         return self.metric_clash_score.calculate_clash_score(filtered_atoms)
 
-    def di(self, first_pdb_path, second_pdb_path, sphere=None):
-        rmsd_result = self.rmsd(first_pdb_path, second_pdb_path, sphere=sphere)
-        inf_result = self.inf(first_pdb_path, second_pdb_path, sphere=sphere)
+    def di(self, first_pdb_path, second_pdb_path, residue_seq_id=None):
+
+        rmsd_result = self.rmsd(first_pdb_path, second_pdb_path, residue_seq_id)
+        inf_result = self.inf(first_pdb_path, second_pdb_path, residue_seq_id)
 
         return rmsd_result / inf_result
 
-    def rmsd(self, first_pdb_path, second_pdb_path, sphere=None):
+    def rmsd(self, first_pdb_path, second_pdb_path, residue_seq_id=None, radius=None):
+
+        c1_atom = self.get_c1_atome(first_pdb_path, residue_seq_id)
+
+        sphere = Sphere(c1_atom, radius)
 
         reference_residues = self.pdb_loader.get_residue(first_pdb_path)
         model_residues = self.pdb_loader.get_residue(second_pdb_path)
