@@ -61,7 +61,18 @@ class Metrics3D(object):
 
     def inf(self, first_pdb_path, second_pdb_path, first_mcannotate_path=None, second_mcannotate_path=None
             , bp_type='all', residue_seq_id=None, radius=None):
-
+        """
+        Calculates INF value based on given files
+        :param first_pdb_path: first pdb files
+        :param second_pdb_path: second pdb files
+        :param first_mcannotate_path: optional, mc annotate first file
+        :param second_mcannotate_path: optional, mc annotate second file
+        :param bp_type: type of bp - available 'all pairs', 'wc', 'nWc', 'stacking', 'all' (including pairs and stacking)
+        :param sphere:
+        :param residue_seq_id:
+        :param radius: sphere radius
+        :return: INF value
+        """
         c1_atom = self.get_c1_atome(first_pdb_path, residue_seq_id)
 
         sphere = Sphere(c1_atom, radius) if c1_atom is not None else None
@@ -89,7 +100,14 @@ class Metrics3D(object):
         return self.metric_inf.calculate_inf()
 
     def p_value(self, first_pdb_path, second_pdb_path, residue_seq_id=None, radius=None):
-
+        """
+        Calculates P VALUE value based on given files
+        :param first_pdb_path: first pdb files
+        :param second_pdb_path: second pdb files
+        :param residue_seq_id:
+        :param radius: sphere radius
+        :return: P VALUE value
+        """
         reference_residues = self.pdb_loader.get_residue(first_pdb_path)
         model_residues = self.pdb_loader.get_residue(second_pdb_path)
 

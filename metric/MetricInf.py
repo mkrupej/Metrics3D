@@ -42,9 +42,21 @@ class MetricsInf(object):
         return pair["a_compound"], pair["a_number"], pair["b_compound"], pair["b_number"]
 
     def get_extracted_pair_set(self, pair_set):
+        """
+        Base on given pair set extracts values to comparison
+        :param pair_set: base pair set
+        :return: base pair set with removed unused properties
+        """
         return [self.extract_significant_values_from_pair(e) for e in pair_set]
 
     def calculate_inf(self):
+        """
+        Calculates Inf metric
+        tp - true positive
+        fp - false positive
+        fn - false negative
+        :return: value of inf metric
+        """
 
         model = self.get_extracted_pair_set(self.model_pairs)
         reference = self.get_extracted_pair_set(self.reference_pairs)
