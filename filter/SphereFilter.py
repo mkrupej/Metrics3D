@@ -1,3 +1,8 @@
+"""
+SphereFilter - responsible for filtering using the sphere
+"""
+
+
 class Sphere(object):
 
     def __init__(self, center, radius):
@@ -5,6 +10,11 @@ class Sphere(object):
         self.r = radius
 
     def __contains__(self, atom):
+        """
+
+        :param atom: atom object from BIO.pdb
+        :return: true if atom is in sphere
+        """
         p = atom.get_coord()
         if (p[0]-self.c[0]) ** 2 + (p[1]-self.c[1]) ** 2 + (p[2]-self.c[2]) ** 2 < self.r ** 2:
             return True
@@ -13,7 +23,14 @@ class Sphere(object):
 
 
 def filter_intersection_atoms(reference_residues, model_residues, sphere=None):
+    """
+    filters common atoms between corresponding residues
 
+    :param reference_residues:
+    :param model_residues:
+    :param sphere:
+    :return: filtered reference_atoms, model_atoms
+    """
     model_id_list = map(lambda x: x.get_id()[1], model_residues)
 
     intersection_seq_id_list = [s.get_id()[1] for s in reference_residues if s.get_id()[1] in model_id_list]
@@ -35,7 +52,13 @@ def filter_intersection_atoms(reference_residues, model_residues, sphere=None):
 
 
 def filter_atoms_in_residue(residue, sphere):
+    """
+    filters atoms in the residue
 
+    :param residue:
+    :param sphere:
+    :return:
+    """
     if sphere is not None and isinstance(sphere, Sphere):
         return filter(lambda x: sphere.__contains__(x), [a for a in residue.get_atoms()])
     else:
@@ -43,6 +66,13 @@ def filter_atoms_in_residue(residue, sphere):
 
 
 def filter_atoms(atoms, sphere):
+    """
+    filters atoms
+
+    :param atoms:
+    :param sphere:
+    :return:
+    """
     if sphere is not None and isinstance(sphere, Sphere):
         return filter(lambda x: sphere.__contains__(x), [a for a in atoms])
     else:
@@ -50,7 +80,14 @@ def filter_atoms(atoms, sphere):
 
 
 def filter_base_pairs(base_pairs, sphere, residues):
+    """
+    filters base pairs in the residue
 
+    :param base_pairs: list of base pairs
+    :param sphere:
+    :param residues:
+    :return:
+    """
     result = []
 
     for b in base_pairs:

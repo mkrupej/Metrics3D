@@ -14,7 +14,7 @@ class PDBLoader(object):
 
     def retrieve_pdb_file(self, pdb_id):
         """
-        it downloads the pdb file to pdb directory
+        downloads the pdb file to pdb directory
 
         :param pdb_id: structure id
         """

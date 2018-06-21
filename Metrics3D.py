@@ -18,13 +18,26 @@ class Metrics3D(object):
         self.metric_p_value = MetricsPValue()
 
     def get_c1_atome(self, pdb_path, residue_seq_id):
+        """
+
+        :param pdb_path: pdb file path
+        :param residue_seq_id:
+        :return: return C1' atom from residue
+        """
         if residue_seq_id is None:
             return None
         else:
             return self.pdb_loader.get_atom_by_residue_seq(pdb_path, residue_seq_id)
 
     def clash_score(self, pdb_path, distance, residue_seq_id=None, radius=None):
-
+        """
+        Calculates Clash Score value based on given files
+        :param first_pdb_path: first pdb files
+        :param second_pdb_path: second pdb files
+        :param residue_seq_id:
+        :param radius: sphere radius
+        :return: Clash Score value
+        """
         c1_atom = self.get_c1_atome(pdb_path, residue_seq_id)
 
         sphere = Sphere(c1_atom, radius) if c1_atom is not None else None
@@ -37,14 +50,28 @@ class Metrics3D(object):
         return self.metric_clash_score.calculate_clash_score(filtered_atoms)
 
     def di(self, first_pdb_path, second_pdb_path, residue_seq_id=None, radius=None):
-
+        """
+        Calculates DI value based on given files
+        :param first_pdb_path: first pdb files
+        :param second_pdb_path: second pdb files
+        :param residue_seq_id:
+        :param radius: sphere radius
+        :return: DI value
+        """
         rmsd_result = self.rmsd(first_pdb_path, second_pdb_path, residue_seq_id, radius)
         inf_result = self.inf(first_pdb_path, second_pdb_path, residue_seq_id=residue_seq_id, radius=radius)
 
         return rmsd_result / inf_result
 
     def rmsd(self, first_pdb_path, second_pdb_path, residue_seq_id=None, radius=None):
-
+        """
+        Calculates RMSD value based on given files
+        :param first_pdb_path: first pdb files
+        :param second_pdb_path: second pdb files
+        :param residue_seq_id:
+        :param radius: sphere radius
+        :return: RMSD value
+        """
         c1_atom = self.get_c1_atome(first_pdb_path, residue_seq_id)
 
         sphere = Sphere(c1_atom, radius) if c1_atom is not None else None

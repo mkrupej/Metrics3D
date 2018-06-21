@@ -67,8 +67,6 @@ class BasePairLoader(object):
         """
         if not os.path.exists(save_path):
             wget.download(download_path, save_path)
-        else:
-            print('File exists: {}'.format(save_path))
 
     def get_all_pairs(self, first_pdb_file, second_pdb_file, first_mc_annotate_file=None,
                       second_mc_annotate_file=None):

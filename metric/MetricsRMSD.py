@@ -1,3 +1,6 @@
+"""
+Calculates RMSD metric
+"""
 from Bio.SVDSuperimposer import SVDSuperimposer
 from helper.PDBHelper import *
 
@@ -10,11 +13,19 @@ class MetricsRMSD(object):
         self.sup = SVDSuperimposer()
 
     def clear(self):
+        """
+        clear reference_coordinate and model_coordinate
+        """
         self.reference_coordinate = None
         self.model_coordinate = None
 
     def set(self, reference_atoms, model_atoms):
+        """
+        set reference_coordinate and model_coordinate
 
+        :param reference_atoms:
+        :param model_atoms:
+        """
         reference_coordinate = to_vector_list(reference_atoms)
         model_coordinate = to_vector_list(model_atoms)
 
@@ -28,6 +39,9 @@ class MetricsRMSD(object):
         self.model_coordinate = model_coordinate
 
     def run_svd(self):
+        """
+        run superposition
+        """
         self.sup.set(self.reference_coordinate, self.model_coordinate)
         self.sup.run()
     
@@ -40,6 +54,9 @@ class MetricsRMSD(object):
         return diff
 
     def calculate_rms(self):
+        """
+        :return: return rmsd value
+        """
         diff = self.pre_calculate_rms()
         return numpy.sqrt(sum(sum(diff * diff)) / len(self.model_coordinate))
 

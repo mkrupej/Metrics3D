@@ -1,9 +1,6 @@
 from Metrics3D import Metrics3D
-from loader.PDBLoader import *
 
 metric = Metrics3D()
-
-pdb_loader = PDBLoader()
 
 #domyslnie inf jest liczony dla wszystkich par i stacking
 print(metric.inf('pdb/pdb1ehz.ent', 'pdb/pdb1evv.ent', 'base_pair_mcannotate/1ehz', 'base_pair_mcannotate/1evv'))
