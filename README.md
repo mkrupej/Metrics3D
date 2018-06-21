@@ -22,7 +22,7 @@ metric = Metrics3D()
 ```
 - rmsd
 - clash_score
-- inf
+- inf (z mozliwoscia filtrowania all pairs, all (pairs + stacking), stacking, wc (pary Watson Crick), nWc (pary nie-Watson Crick), stacking
 - di
 - p_value
 ```
@@ -46,14 +46,13 @@ Przyklady uzycia zostaly umieszczone w katalogu examples
 metric.rmsd('pdb/pdb1ehz.ent', 'pdb/pdb1evv.ent')
 ```
 + PvalueExample
-Obliczanie pvalue dla zwiazkow 4TNA i 4TRA, oraz 1EHZ i 1EVV
 ```
-metric.p_value('pdb/pdb4tna.ent', 'pdb/pdb4tra.ent')
-
-metric.p_value('pdb/pdb1ehz.ent', 'pdb/pdb1evv.ent')
+metric.p_value('pdb/pdb1ehz.ent', 'pdb/pdb1evv.ent', residue_seq_id=56, radius=100)
 ```
 + InfExample
-
+```
+metric.inf('pdb/pdb4tna.ent', 'pdb/pdb6tna.ent', 'base_pair_mcannotate/4tna', 'base_pair_mcannotate/6tna', bp_type="nWc")
+```
 + DIExample
 ```
 metric.di('pdb/pdb1ehz.ent', 'pdb/pdb1evv.ent')
