@@ -25,7 +25,7 @@ class BasePairParser(object):
         """
         if mc_annotate_file is None:
             file = self.STACKING.format(server_pair_file)
-            return BaseStacking(self.extract_alignment_from_server_file(server_pair_file))
+            return BaseStacking(self.extract_alignment_from_server_file(file))
 
         else:
             return BaseStacking(self.extract_stacking_alignment_from_mc_annotate(mc_annotate_file))
@@ -38,7 +38,7 @@ class BasePairParser(object):
         """
         if mc_annotate_file is None:
             file = self.PAIR.format(server_pair_file)
-            return BasePair(self.extract_alignment_from_server_file(server_pair_file))
+            return BasePair(self.extract_alignment_from_server_file(file))
         else:
             return BasePair(self.extract_pair_alignment_from_mc_annotate(mc_annotate_file))
 

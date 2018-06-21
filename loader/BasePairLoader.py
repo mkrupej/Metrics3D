@@ -37,7 +37,6 @@ class BasePairLoader(object):
         for pdb_id in pdb_id_list:
             save_path = self.SAVE_PATH_PAIR.format(pdb_id)
             download_path = self.BASE_PAIR_CALCULATOR.format(pdb_id)
-
             self.download_file(download_path, save_path)
 
     def retrieve_stacking(self, pdb_id_list):
@@ -80,6 +79,8 @@ class BasePairLoader(object):
         :return: two lists containing base pairs for each pdb_id. Every pair is stored in dictionary.
         """
         if not first_mc_annotate_file:
+            first_pdb_file = first_pdb_file[-8:-4]
+            second_pdb_file = second_pdb_file[-8:-4]
             self.retrieve_base_pair([first_pdb_file, second_pdb_file])
         first_result = self.parser.extract_pair(first_pdb_file, first_mc_annotate_file).get_all_pairs()
 
@@ -96,6 +97,8 @@ class BasePairLoader(object):
         :return: two lists containing base pairs for each pdb_id. Every pair is stored in dictionary.
         """
         if not first_mc_annotate_file:
+            first_pdb_file = first_pdb_file[-8:-4]
+            second_pdb_file = second_pdb_file[-8:-4]
             self.retrieve_base_pair([first_pdb_file, second_pdb_file])
         first_result = self.parser.extract_pair(first_pdb_file, first_mc_annotate_file).get_wc_pairs()
         second_result = self.parser.extract_pair(second_pdb_file, second_mc_annotate_file).get_wc_pairs()
@@ -110,6 +113,8 @@ class BasePairLoader(object):
         :return: two lists containing base pairs for each pdb_id. Every pair is stored in dictionary.
         """
         if not first_mc_annotate_file:
+            first_pdb_file = first_pdb_file[-8:-4]
+            second_pdb_file = second_pdb_file[-8:-4]
             self.retrieve_base_pair([first_pdb_file, second_pdb_file])
         first_result = self.parser.extract_pair(first_pdb_file, first_mc_annotate_file).get_nwc_pairs()
         second_result = self.parser.extract_pair(second_pdb_file, second_mc_annotate_file).get_nwc_pairs()
@@ -124,6 +129,8 @@ class BasePairLoader(object):
          :return: two lists containing base pairs for each pdb_id. Every pair is stored in dictionary.
          """
         if not first_mc_annotate_file:
+            first_pdb_file = first_pdb_file[-8:-4]
+            second_pdb_file = second_pdb_file[-8:-4]
             self.retrieve_stacking([first_pdb_file, second_pdb_file])
         first_result = self.parser.extract_stacking(first_pdb_file, first_mc_annotate_file).get_stacking()
         second_result = self.parser.extract_stacking(second_pdb_file, second_mc_annotate_file).get_stacking()
@@ -138,8 +145,11 @@ class BasePairLoader(object):
          :return: two lists containing base pairs for each pdb_id. Every pair is stored in dictionary.
          """
         if not first_mc_annotate_file:
+            first_pdb_file = first_pdb_file[-8:-4]
+            second_pdb_file = second_pdb_file[-8:-4]
             self.retrieve_base_pair([first_pdb_file, second_pdb_file])
             self.retrieve_stacking([first_pdb_file, second_pdb_file])
+
         first_result_stacking = self.parser.extract_stacking(first_pdb_file, first_mc_annotate_file).get_stacking()
         first_result_pair = self.parser.extract_pair(first_pdb_file, first_mc_annotate_file).get_all_pairs()
         second_result_stacking = self.parser.extract_stacking(second_pdb_file, second_mc_annotate_file).get_stacking()
