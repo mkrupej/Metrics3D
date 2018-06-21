@@ -70,12 +70,15 @@ class BasePairLoader(object):
         else:
             print('File exists: {}'.format(save_path))
 
-    def get_all_pairs(self, first_pdb_file, second_pdb_file, first_mc_annotate_file = None, second_mc_annotate_file = None):
+    def get_all_pairs(self, first_pdb_file, second_pdb_file, first_mc_annotate_file=None,
+                      second_mc_annotate_file=None):
         """
-        Get ALL base pairs alignment from given two pdb ids
+        Get ALL base pairs alignment from given two pdb files
         :param self:
         :param first_pdb_file:
         :param second_pdb_file:
+        :param first_mc_annotate_file: optional mc_annotate base pair alignment file
+        :param second_mc_annotate_file: optional mc_annotate base pair alignment file
         :return: two lists containing base pairs for each pdb_id. Every pair is stored in dictionary.
         """
         if not first_mc_annotate_file:
@@ -88,14 +91,17 @@ class BasePairLoader(object):
 
         return first_result, second_result
 
-    def get_wc(self, first_pdb_file, second_pdb_file, first_mc_annotate_file = None, second_mc_annotate_file = None):
+    def get_wc(self, first_pdb_file, second_pdb_file, first_mc_annotate_file=None,
+               second_mc_annotate_file=None):
         """
-        Get WATSON-CRICK base pairs alignment from given two pdb ids
-        :param self:
-        :param first_pdb_id:
-        :param second_pdb_id:
+        Get WATSON-CRICK base pairs alignment from given two pdb files
+        :param first_pdb_file:
+        :param second_pdb_file:
+        :param first_mc_annotate_file: optional mc_annotate base pair alignment file
+        :param second_mc_annotate_file: optional mc_annotate base pair alignment file
         :return: two lists containing base pairs for each pdb_id. Every pair is stored in dictionary.
         """
+
         if not first_mc_annotate_file:
             first_pdb_file = first_pdb_file[-8:-4]
             second_pdb_file = second_pdb_file[-8:-4]
@@ -104,12 +110,15 @@ class BasePairLoader(object):
         second_result = self.parser.extract_pair(second_pdb_file, second_mc_annotate_file).get_wc_pairs()
         return first_result, second_result
 
-    def get_nwc(self, first_pdb_file, second_pdb_file, first_mc_annotate_file = None, second_mc_annotate_file = None):
+    def get_nwc(self, first_pdb_file, second_pdb_file, first_mc_annotate_file=None,
+                second_mc_annotate_file=None):
         """
-        Get ALL base pairs alignment except WATSON-CRICK from given two pdb ids
+        Get ALL base pairs alignment except WATSON-CRICK from given two pdb files
         :param self:
-        :param first_pdb_id:
-        :param second_pdb_id:
+        :param first_pdb_file:
+        :param second_pdb_file:
+        :param first_mc_annotate_file: optional mc_annotate base pair alignment file
+        :param second_mc_annotate_file: optional mc_annotate base pair alignment file
         :return: two lists containing base pairs for each pdb_id. Every pair is stored in dictionary.
         """
         if not first_mc_annotate_file:
@@ -120,12 +129,15 @@ class BasePairLoader(object):
         second_result = self.parser.extract_pair(second_pdb_file, second_mc_annotate_file).get_nwc_pairs()
         return first_result, second_result
 
-    def get_stacking(self, first_pdb_file, second_pdb_file, first_mc_annotate_file = None, second_mc_annotate_file = None):
+    def get_stacking(self, first_pdb_file, second_pdb_file, first_mc_annotate_file=None,
+                     second_mc_annotate_file=None):
         """
-         Get ALL stacking pairs alignment from given two pdb ids
+         Get ALL stacking pairs alignment from given two pdb files
          :param self:
-         :param first_pdb_id:
-         :param second_pdb_id:
+         :param first_pdb_file:
+         :param second_pdb_file:
+         :param first_mc_annotate_file: optional mc_annotate base pair alignment file
+         :param second_mc_annotate_file: optional mc_annotate base pair alignment file
          :return: two lists containing base pairs for each pdb_id. Every pair is stored in dictionary.
          """
         if not first_mc_annotate_file:
@@ -136,12 +148,15 @@ class BasePairLoader(object):
         second_result = self.parser.extract_stacking(second_pdb_file, second_mc_annotate_file).get_stacking()
         return first_result, second_result
 
-    def get_all(self, first_pdb_file, second_pdb_file, first_mc_annotate_file = None, second_mc_annotate_file = None):
+    def get_all(self, first_pdb_file, second_pdb_file, first_mc_annotate_file=None,
+                second_mc_annotate_file=None):
         """
-         Get ALL base pairs and stacking alignment from given two pdb ids
+         Get ALL base pairs and stacking alignment from given two pdb files
          :param self:
-         :param first_pdb_id:
-         :param second_pdb_id:
+         :param first_pdb_file:
+         :param second_pdb_file:
+         :param first_mc_annotate_file: optional mc_annotate base pair alignment file
+         :param second_mc_annotate_file: optional mc_annotate base pair alignment file
          :return: two lists containing base pairs for each pdb_id. Every pair is stored in dictionary.
          """
         if not first_mc_annotate_file:
@@ -155,4 +170,3 @@ class BasePairLoader(object):
         second_result_stacking = self.parser.extract_stacking(second_pdb_file, second_mc_annotate_file).get_stacking()
         second_result_pair = self.parser.extract_pair(second_pdb_file, second_mc_annotate_file).get_all_pairs()
         return first_result_pair+first_result_stacking, second_result_pair + second_result_stacking
-

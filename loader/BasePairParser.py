@@ -17,11 +17,12 @@ class BasePairParser(object):
         self.PAIR = base_pair_path
         self.STACKING = base_stacking_path
 
-    def extract_stacking(self, server_pair_file=None, mc_annotate_file = None):
+    def extract_stacking(self, server_pair_file=None, mc_annotate_file=None):
         """
-        Returns extracted stacking alignment as list for given pdb_id
-        :param pdb_file:
-        :return: stacking alignment as BasePair objcets
+        Returns extracted stacking alignment as list for given pdb structure
+        :param server_pair_file: name of server file containing base pairs
+        :param mc_annotate_file: name of mcannotate file containing base pairs
+        :return: stacking alignment as BasePair objects
         """
         if mc_annotate_file is None:
             file = self.STACKING.format(server_pair_file)
@@ -30,10 +31,11 @@ class BasePairParser(object):
         else:
             return BaseStacking(self.extract_stacking_alignment_from_mc_annotate(mc_annotate_file))
 
-    def extract_pair(self, server_pair_file=None, mc_annotate_file = None):
+    def extract_pair(self, server_pair_file=None, mc_annotate_file=None):
         """
-        Returns extracted base pair alignment as list for given pdb_id
-        :param pdb_id:
+        Returns extracted base pair alignment as list for given pdb structure
+        :param server_pair_file: name of server file containing base pairs
+        :param mc_annotate_file: name of mcannotate file containing base pairs
         :return: base pair alignment BasePair object
         """
         if mc_annotate_file is None:
@@ -89,10 +91,10 @@ class BasePairParser(object):
                 if "Base-pairs" in line_ref:
                     ref_save = 1
                 elif ref_save:
-                    pair['a_compound'] = re.findall('[A-Z]', line_ref )[2]
-                    pair['a_number'] = re.findall('\d+', line_ref )[0]
-                    pair['b_compound'] = re.findall('[A-Z]', line_ref )[3]
-                    pair['b_number'] = re.findall('\d+', line_ref )[1]
+                    pair['a_compound'] = re.findall('[A-Z]', line_ref)[2]
+                    pair['a_number'] = re.findall('\d+', line_ref)[0]
+                    pair['b_compound'] = re.findall('[A-Z]', line_ref)[3]
+                    pair['b_number'] = re.findall('\d+', line_ref)[1]
                     pair['interaction'] = re.search(r'(\s(\w|\D){2,3}/(\w|\D){2,3}\s)', line_ref).group(0).strip()
                     alignment.append(copy.deepcopy(pair))
                     pair.clear()
@@ -127,7 +129,6 @@ class BasePairParser(object):
                     pair['a_compound'] = "S"
                     pair['a_number'] = re.findall('\d+', line_ref)[0]
                     pair['b_compound'] = "S"
-                    #print(line_ref, pair["a_number"])
                     pair['b_number'] = re.findall('\d+', line_ref)[1]
                     pair['interaction'] = "s"
                     alignment.append(copy.deepcopy(pair))
