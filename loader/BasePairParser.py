@@ -127,7 +127,7 @@ class BasePairParser(object):
                     pair['a_compound'] = "S"
                     pair['a_number'] = re.findall('\d+', line_ref)[0]
                     pair['b_compound'] = "S"
-                    print(line_ref, pair["a_number"])
+                    #print(line_ref, pair["a_number"])
                     pair['b_number'] = re.findall('\d+', line_ref)[1]
                     pair['interaction'] = "s"
                     alignment.append(copy.deepcopy(pair))

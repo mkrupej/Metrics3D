@@ -47,7 +47,7 @@ class Metrics3D(object):
             , bp_type='all', sphere=None):
 
         if bp_type == 'all pairs':
-            first_base_pairs, second_base_pairs = self.base_pair_loader.get_all_pairs(first_pdb_path, second_pdb_path, first_mcannotate_path, second_mcannotate_path, second_mcannotate_path)
+            first_base_pairs, second_base_pairs = self.base_pair_loader.get_all_pairs(first_pdb_path, second_pdb_path, first_mcannotate_path, second_mcannotate_path)
         elif bp_type == 'wc':
             first_base_pairs, second_base_pairs = self.base_pair_loader.get_wc(first_pdb_path, second_pdb_path, first_mcannotate_path, second_mcannotate_path)
         elif bp_type == 'nWc':
@@ -106,3 +106,16 @@ class Metric3DPdbId(object):
         return self.metric.rmsd('pdb/pdb{}.ent'.format(first_pdb_id), 'pdb/pdb{}.ent'.format(second_pdb_id), sphere)
 
 
+
+
+example = Metrics3D()
+
+print(example.inf("pdb/pdb4tna.ent", "pdb/pdb4tra.ent", "base_pair_mcannotate/4tna", "base_pair_mcannotate/4tra", bp_type="all"))
+print(example.inf("pdb/pdb4tna.ent", "pdb/pdb4tra.ent", "base_pair_mcannotate/4tna", "base_pair_mcannotate/4tra", bp_type="stacking"))
+print(example.inf("pdb/pdb4tna.ent", "pdb/pdb4tra.ent", "base_pair_mcannotate/4tna", "base_pair_mcannotate/4tra", bp_type="wc"))
+print(example.inf("pdb/pdb4tna.ent", "pdb/pdb4tra.ent", "base_pair_mcannotate/4tna", "base_pair_mcannotate/4tra", bp_type="nWc"))
+print(example.inf("pdb/pdb4tna.ent", "pdb/pdb4tra.ent", "base_pair_mcannotate/4tna", "base_pair_mcannotate/4tra", bp_type="all pairs"))
+print(example.p_value("pdb/pdb4tna.ent", "pdb/pdb4tra.ent"))
+
+
+print(example.inf("pdb/pdb4tna.ent", "pdb/pdb4tna.ent", "base_pair_mcannotate/4tna", "base_pair_mcannotate/4tna", bp_type="all pairs"))
