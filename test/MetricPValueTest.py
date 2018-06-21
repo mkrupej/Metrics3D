@@ -1,7 +1,19 @@
 import unittest
+from Metrics3D import Metrics3D
 
 
 class MetricPValueTest(unittest.TestCase):
 
-    def test_p_value_test(self):
-        self.assertEqual(1, 1)
+    metric = Metrics3D()
+
+    def test_p_value_case_1(self):
+
+        p_value_result = self.metric.p_value('pdb/pdb4tna.ent', 'pdb/pdb4tra.ent')
+
+        self.assertEqual(round(p_value_result, 3), 0.074)
+
+    def test_p_value_case_2(self):
+
+        p_value_result = self.metric.p_value('pdb/pdb1ehz.ent', 'pdb/pdb1evv.ent')
+
+        self.assertEqual(round(p_value_result, 2), 0.11)
