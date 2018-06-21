@@ -20,6 +20,8 @@ class MetricsRMSD(object):
 
         if not len(reference_coordinate) == len(model_coordinate):
             raise ValueError("Reference coordinate and coordinate moving atom lists differ in size")
+        elif len(reference_coordinate) == len(model_coordinate) and len(reference_coordinate) == 0:
+            raise ValueError("Reference coordinate and coordinate moving atom are empty")
 
         self.clear()
         self.reference_coordinate = reference_coordinate
