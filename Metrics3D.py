@@ -1,17 +1,18 @@
-from loader.PDBLoader import *
-from loader.BasePairLoader import *
-from metric.MetricsRMSD import *
-from metric.MetricClashScore import *
+from loader.PDBLoader import PDBLoader
+from loader.BasePairLoader import BasePairLoader
+from metric.MetricsRMSD import MetricsRMSD
+from metric.MetricClashScore import MetricClashScore
 from filter.SphereFilter import *
-from metric.MetricInf import *
-from metric.MetricsPValue import *
+from metric.MetricInf import MetricsInf
+from metric.MetricsPValue import MetricsPValue
+
 
 class Metrics3D(object):
 
     def __init__(self):
         self.pdb_loader = PDBLoader()
         self.base_pair_loader = BasePairLoader()
-#        self.metric_rmsd = MetricsRMSD()
+        self.metric_rmsd = MetricsRMSD()
         self.metric_inf = MetricsInf()
         self.metric_clash_score = MetricClashScore()
         self.metric_p_value = MetricsPValue()
@@ -43,7 +44,7 @@ class Metrics3D(object):
 
         return self.metric_rmsd.calculate_rms()
 
-    def inf(self, first_pdb_path, second_pdb_path, first_mcannotate_path = None, second_mcannotate_path=None
+    def inf(self, first_pdb_path, second_pdb_path, first_mcannotate_path=None, second_mcannotate_path=None
             , bp_type='all', sphere=None):
 
         if bp_type == 'all pairs':
@@ -84,38 +85,3 @@ class Metrics3D(object):
         #print("rmsd: {}, len: {}, mean: {}, std: {}".format(rmsd, len, mean, std))
         self.metric_p_value.set_parameters(len, rmsd, mean, std)
         return self.metric_p_value.calculate_p_value()
-
-
-class Metric3DPdbId(object):
-
-    def __init__(self):
-        self.metric = Metrics3D()
-        self.pdb_loader = PDBLoader()
-
-    def clash_score(self, pdb_id, distance, sphere=None):
-
-        self.pdb_loader.retrieve_pdb_file(pdb_id)
-
-        return self.metric.clash_score('pdb/pdb{}.ent'.format(pdb_id), distance, sphere)
-
-    def rmsd(self, first_pdb_id, second_pdb_id, sphere=None):
-
-        self.pdb_loader.retrieve_pdb_file(first_pdb_id)
-        self.pdb_loader.retrieve_pdb_file(second_pdb_id)
-
-        return self.metric.rmsd('pdb/pdb{}.ent'.format(first_pdb_id), 'pdb/pdb{}.ent'.format(second_pdb_id), sphere)
-
-
-
-
-example = Metrics3D()
-
-print(example.inf("pdb/pdb4tna.ent", "pdb/pdb4tra.ent", "base_pair_mcannotate/4tna", "base_pair_mcannotate/4tra", bp_type="all"))
-print(example.inf("pdb/pdb4tna.ent", "pdb/pdb4tra.ent", "base_pair_mcannotate/4tna", "base_pair_mcannotate/4tra", bp_type="stacking"))
-print(example.inf("pdb/pdb4tna.ent", "pdb/pdb4tra.ent", "base_pair_mcannotate/4tna", "base_pair_mcannotate/4tra", bp_type="wc"))
-print(example.inf("pdb/pdb4tna.ent", "pdb/pdb4tra.ent", "base_pair_mcannotate/4tna", "base_pair_mcannotate/4tra", bp_type="nWc"))
-print(example.inf("pdb/pdb4tna.ent", "pdb/pdb4tra.ent", "base_pair_mcannotate/4tna", "base_pair_mcannotate/4tra", bp_type="all pairs"))
-print(example.p_value("pdb/pdb4tna.ent", "pdb/pdb4tra.ent"))
-
-
-print(example.inf("pdb/pdb4tna.ent", "pdb/pdb4tna.ent", "base_pair_mcannotate/4tna", "base_pair_mcannotate/4tna", bp_type="all pairs"))

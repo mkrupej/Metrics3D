@@ -1,9 +1,5 @@
-import numpy
 from numpy import sqrt
 import scipy.special as scipy
-
-import filter.SphereFilter
-from metric import MetricsRMSD
 
 
 class MetricsPValue(object):

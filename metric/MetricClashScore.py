@@ -7,6 +7,10 @@ class MetricClashScore(object):
         self.distance = None
 
     def set_distance(self, distance):
+        """
+
+        :param distance:
+        """
         self.distance = distance
 
     def calculate_clash_score(self, model_atoms):

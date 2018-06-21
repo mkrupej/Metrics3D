@@ -4,7 +4,7 @@ BasePairLoader - responsible for downloading and extracting base pair
 """
 import wget
 import os
-from loader.BasePairParser import *
+from loader.BasePairParser import BasePairParser
 
 
 class BasePairLoader(object):
@@ -145,9 +145,4 @@ class BasePairLoader(object):
         second_result_stacking = self.parser.extract_stacking(second_pdb_file, second_mc_annotate_file).get_stacking()
         second_result_pair = self.parser.extract_pair(second_pdb_file, second_mc_annotate_file).get_all_pairs()
         return first_result_pair+first_result_stacking, second_result_pair + second_result_stacking
-
-#
-# a = BasePairLoader()
-#
-# print(a.get_nwc("../pdb/pdb1ehz.ent", "../pdb/pdb1evv.ent", "../base_pair_mcannotate/1EHZ", "../base_pair_mcannotate/1EHZ"))
 

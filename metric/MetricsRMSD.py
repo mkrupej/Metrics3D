@@ -28,14 +28,6 @@ class MetricsRMSD(object):
     def run_svd(self):
         self.sup.set(self.reference_coordinate, self.model_coordinate)
         self.sup.run()
-
-    def calculate_rms(self):
-        rotation, translation = self.sup.get_rotran()
-
-        transformed_coordinate = numpy.dot(self.model_coordinate, rotation) + translation
-
-        diff = transformed_coordinate - self.reference_coordinate
-        return numpy.sqrt(sum(sum(diff * diff)) / len(self.model_coordinate))
     
     def pre_calculate_rms(self):
         rotation, translation = self.sup.get_rotran()

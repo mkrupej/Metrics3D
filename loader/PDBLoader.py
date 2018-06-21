@@ -1,3 +1,6 @@
+"""
+PDBLoader - responsible for downloading pdb file by id and parsing downloaded structure
+"""
 from Bio.PDB import *
 import shutil
 
@@ -10,14 +13,29 @@ class PDBLoader(object):
         shutil.rmtree('obsolete', ignore_errors=True)
 
     def retrieve_pdb_file(self, pdb_id):
+        """
+        it downloads the pdb file to pdb directory
+
+        :param pdb_id: structure id
+        """
         self.pdb_list.retrieve_pdb_file(pdb_id, file_format='pdb', pdir='pdb')
         shutil.rmtree('obsolete', ignore_errors=True)
 
     def parse_structure_by_id(self, pdb_id):
+        """
+
+        :param pdb_id: structure id
+        :return: Bio.PDB object
+        """
         self.retrieve_pdb_file(pdb_id)
         return self.parser.get_structure(pdb_id, 'pdb/pdb{}.ent'.format(pdb_id.lower()))
 
     def parse_structure_by_file(self, file_path):
+        """
+
+        :param file_path: path to pdb file
+        :return: Bio.PDB object
+        """
         return self.parser.get_structure('pdb_id', file_path)
 
     def get_residue(self, pdb_path):
@@ -45,4 +63,9 @@ class PDBLoader(object):
         return len(self.get_residue(pdb_id))
 
     def get_residue_as_map(self, pdb_path):
+        """
+
+        :param pdb_path: file_path: path to pdb file
+        :return: map of residue seq -> residue object
+        """
         return {e.get_id()[1]: e for e in self.parse_structure_by_file(pdb_path).get_residues()}

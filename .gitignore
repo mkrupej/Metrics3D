@@ -1,4 +1,7 @@
 obsolete/
 .idea/
+base_pair/
+base_stacking/
+base_pair_mcannotate/
 *.pyc
 mc_annotate_files.tar.gz
